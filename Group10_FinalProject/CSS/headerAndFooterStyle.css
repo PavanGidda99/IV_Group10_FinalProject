@@ -1,0 +1,147 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+
+#header {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #0082e6;
+	height:80px;
+	width: 100%;
+}
+
+#title a {
+	text-decoration: none;
+	color: white;
+	font-size: 30px;
+	line-height: 80px;
+	padding: 0 97px;
+	font-weight: bold;
+}
+
+#header ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	float: right;
+	margin-right: 20px;
+}
+
+#header ul li {
+	display: inline-block;
+	line-height: 80px;
+	margin: 0 10px;
+}
+
+#header ul li a {
+	text-decoration: none;
+	color: white;
+	padding: 14px 16px;
+}
+
+#header ul li a:hover {
+	background-color: #1b9bff;
+}
+
+#navigationBar {
+	font-family: Arial, Helvetica, sans-serif;
+	height:45px;
+	width: 100%;
+}
+
+
+#navigationBar ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	float: left;
+	margin-left: 76px;
+    margin-top: 3px;
+}
+
+#navigationBar ul li {
+	display: inline-block;
+	line-height: 48px;
+	margin: 0 10px;
+}
+
+#navigationBar ul li a {
+	text-decoration: none;
+	color: black;
+	padding: 14px 16px;
+}
+
+#navigationBar ul li a:hover {
+	background-color: #0082e6;
+	color: white;
+}
+
+hr {
+	width: 99%;
+}
+
+#footer {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #0082e6;
+	display: flex;
+	flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+#footer h3 {
+	color: white;
+	padding-top: 25px;
+}
+
+#footer ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#footer ul li {
+	margin-top: 10px;
+}
+
+#footer ul li a {
+	text-decoration: none;
+	color: white;
+	transition: all 0.3s ease;
+}
+
+#footer ul li a:hover {
+	padding-left: 8px;
+}
+
+#aboutCompany {
+	width: 25%;
+	padding: 0 0 120px 225px;
+}
+
+#getHelp {
+	width: 25%;
+	padding: 0 15px;
+}
+
+#followUs a {
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+	margin: 0 10px 10px 0;
+	text-align: center;
+	line-height: 40px;
+	color: white;
+	border-radius: 50%;
+	background-color: #1b9bff;
+	transition: all 0.3s ease;
+}
+
+#followUs a:hover {
+	background-color: white;
+	color: #1b9bff;
+}
+
+#mainBody {
+	height: 680px;
+	width: 100%;
+}

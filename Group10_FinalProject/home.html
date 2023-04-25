@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Health Visualisation </title>
+
+        <!-- External Style sheets -->
+        <link rel="stylesheet" href="CSS/headerAndFooterStyle.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <!-- Javascript files -->
+        <script src="http://d3js.org/d3.v4.js"></script>
+        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+    </head>
+    <body>
+        <div id="header">
+			<label id="title"> <a href=""> Geo Health Vis  </a> </label>
+			<ul>
+				<li> <a href=""> About </a> </li>
+                <li> <a href=""> Contact Us </a> </li>
+			</ul>
+		</div>
+
+		<div id="navigationBar">
+			<ul>
+				<li> <a href=""> Disease </a> </li>
+				<li> <a href=""> Attributes </a> </li>
+                <li> <a href=""> Compare </a> </li>
+			</ul>
+		</div>
+
+        <hr>
+		<div id="mainBody">
+            <svg  id = "svgArea" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
+                
+            </svg> 
+					
+		</div>
+
+        <script>
+
+            // The svg
+            var svg = d3.select("svg"),
+              width = 1000,
+              height = 600;
+            
+            // Map and projection
+            var path = d3.geoPath();
+            var projection = d3.geoMercator()
+              .scale(180)
+              .center([-40,50])
+              .translate([width / 2, height / 2]);
+            
+            // Data and color scale
+            var data = d3.map();
+            var colorScale = d3.scaleThreshold()
+                    .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
+                    .range(d3.schemeBlues[7]);
+            
+            // Load external data and boot
+            d3.queue()
+              .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+              .defer(d3.csv, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv", function(d) { data.set(d.code, +d.pop); })
+              .await(ready);
+            
+            function ready(error, topo) {
+            
+              let mouseOver = function(d) {
+                d3.selectAll(".Country")
+                  .transition()
+                  .duration(200)
+                  .style("opacity", .5)
+                d3.select(this)
+                  .transition()
+                  .duration(200)
+                  .style("opacity", 1)
+                  .style("stroke", "black")
+              }
+            
+              let mouseLeave = function(d) {
+                d3.selectAll(".Country")
+                  .transition()
+                  .duration(200)
+                  .style("opacity", .8)
+                d3.select(this)
+                  .transition()
+                  .duration(200)
+                  .style("stroke", "transparent")
+              }
+            
+              // Draw the map
+              svg.append("g")
+                .selectAll("path")
+                .data(topo.features)
+                .enter()
+                .append("path")
+                  // draw each country
+                  .attr("d", d3.geoPath()
+                    .projection(projection)
+                  )
+                  // set the color of each country
+                  .attr("fill", function (d) {
+                    d.total = data.get(d.id) || 0;
+                    return colorScale(d.total);
+                  })
+                  .style("stroke", "transparent")
+                  .attr("class", function(d){ return "Country" } )
+                  .style("opacity", .8)
+                  .on("mouseover", mouseOver )
+                  .on("mouseleave", mouseLeave )
+                }
+            </script>
+
+        <div id="footer">
+			<div id="aboutCompany">
+				<h3> Company </h3>
+				<ul>
+					<li> <a href=""> About Us </a> </li>
+					<li> <a href=""> Our Services </a> </li>
+					<li> <a href=""> Contact </a> </li>
+				</ul>
+			</div>
+			<div id="getHelp">
+				<h3> Get Help </h3>
+				<ul>
+					<li> <a href=""> FAQ </a> </li>
+                    <li> <a href=""> Privacy Policy </a> </li>
+					
+				</ul>
+			</div>
+			<div id="followUs">
+				<h3> Follow Us </h3>
+				<a href=""> <i class="fab fa-facebook-f"> </i> </a>
+				<a href=""> <i class="fab fa-twitter"> </i> </a>
+				<a href=""> <i class="fab fa-instagram"> </i> </a>
+				<a href=""> <i class="fab fa-linkedin-in"> </i> </a>
+			</div>
+
+		</div>
+
+    </body>
+</html>
