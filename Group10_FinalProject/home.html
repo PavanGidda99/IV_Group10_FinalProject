@@ -6,52 +6,153 @@
 
         <!-- External Style sheets -->
         <link rel="stylesheet" href="CSS/headerAndFooterStyle.css">
+        <link rel="stylesheet" href="CSS/topNavigationBarStyle.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <!-- Javascript files -->
         <script src="http://d3js.org/d3.v4.js"></script>
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-
     </head>
+
     <body>
         <div id="header">
-			<label id="title"> <a href=""> Geo Health Vis  </a> </label>
-			<ul>
-				<li> <a href=""> About </a> </li>
-                <li> <a href=""> Contact Us </a> </li>
-			</ul>
-		</div>
+			     <label id="title"> <a href=""> Geo Health Vis  </a> </label>
+			     <ul>
+				      <li> <a href=""> About </a> </li>
+              <li> <a href=""> Contact Us </a> </li>
+			     </ul>
+		    </div>
 
-		<div id="navigationBar">
-			<ul>
-				<li> <a href=""> Disease </a> </li>
-				<li> <a href=""> Attributes </a> </li>
-                <li> <a href=""> Compare </a> </li>
-			</ul>
-		</div>
+		    <div class="navbar">
+            <div class="dropdown">
+              <button class="dropbtn">Disease 
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content" id="diseasedropdownContent">
+                <a href="#" onclick="">Cancer</a>
+                <a href="#" onclick="heartDiseaseVisualisation()">Heart Attack</a>
+                <a href="#" onclick="">Brain tumor</a>
+              </div>
+            </div>
+            <div class="dropdown">
+              <button class="dropbtn">Attributes 
+                <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content" id="dropdownContent">
+                <a href="#" onclick="document.getElementById('attributeArea').style.display = 'block';document.getElementById('dropdownContent').style.display = 'none';">Gender</a>
+                <a href="#" onclick="document.getElementById('ageAttributeArea').style.display = 'block';document.getElementById('dropdownContent').style.display = 'none';">Age</a>
+                <a href="#" onclick="document.getElementById('yearAttributeArea').style.display = 'block';document.getElementById('dropdownContent').style.display = 'none';">Year span</a>
+              </div>
+            </div>
+            <a href="#home">Compare</a>
+        </div>
 
         <hr>
-		<div id="mainBody">
+        <div id="attributeArea">
+          <div id="attributeheader">
+            <label id="attributetitle"> <a href=""> Visualisation based on Gender Attribute  </a> </label>
+            <ul>
+              <li> <a href="#" onclick="document.getElementById('attributeArea').style.display = 'none';document.getElementById('dropdownContent').style.display = '';"> X </a> </li>
+            </ul>
+          </div>
+          <p> Please select the gender below: </p>
+          <div id="selectionarea">
+            <form>
+              <label class="container">Male
+                <input type="radio" name="gender">
+                <span class="checkmark"></span>
+              </label>
+              <label class="container">Female
+                <input type="radio" name="gender">
+                <span class="checkmark"></span>
+              </label>
+
+              <label class="container">Male and Female
+                <input type="radio" name="gender">
+                <span class="checkmark"></span>
+              </label>
+
+              <label class="container">Others
+                <input type="radio" name="gender">
+                <span class="checkmark"></span>
+              </label>
+            </form>
+            <br><br>
+          </div>
+        </div>
+
+        <div id="ageAttributeArea">
+          <div id="ageAttributeheader">
+            <label id="ageAttributetitle"> <a href=""> Visualisation based on Age Attribute  </a> </label>
+            <ul>
+              <li> <a href="#" onclick="document.getElementById('ageAttributeArea').style.display = 'none';document.getElementById('dropdownContent').style.display = '';"> X </a> </li>
+            </ul>
+          </div>
+          <p> Please enter the specific age below: </p> <br>
+          <div id="ageSelectionarea">
+            <form>
+              <label class="container">From: </label>
+              <input type="text">
+              <label class="container">To: </label>
+              <input type="text">
+              <button style="margin-left: 40px; height: 36px; width: 100px; margin-top:3px;"> Proceed </button>
+            </form>
+            <br><br><br>
+          </div>
+        </div>
+
+        <div id="yearAttributeArea">
+          <div id="yearAttributeheader">
+            <label id="yearAttributetitle"> <a href=""> Visualisation based on Year span Attribute  </a> </label>
+            <ul>
+              <li> <a href="#" onclick="document.getElementById('yearAttributeArea').style.display = 'none';document.getElementById('dropdownContent').style.display = '';"> X </a> </li>
+            </ul>
+          </div>
+          <p> Please enter the specific year span below: </p> <br>
+          <div id="yearSelectionarea">
+            <form>
+              <label class="container">From: </label>
+              <input type="text">
+              <label class="container">To: </label>
+              <input type="text">
+              <button style="margin-left: 40px; height: 36px; width: 100px; margin-top:3px;"> Proceed </button>
+            </form>
+            <br><br><br>
+          </div>
+        </div>
+
+        <h2 id="visualisationTitle" style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> Title </h2>
+
+		    <div id="mainBody">
+            <div id="tooltip" style="position: absolute; opacity: 0;"></div>
             <svg  id = "svgArea" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
                 
             </svg> 
+
+            <svg  id = "svgAreaForHeartDiseases" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px; display: none;"> 
+                
+            </svg>
+
 					
-		</div>
+		    </div>
 
         <script>
-
+          populationVisualisation();
+          function populationVisualisation() {
+            document.getElementById("svgAreaForHeartDiseases").style.display = "none";
+            document.getElementById("svgArea").style.display = "block";
+            document.getElementById("visualisationTitle").textContent = "Population trends Visualisation";
+            
             // The svg
-            var svg = d3.select("svg"),
-              width = 1000,
-              height = 600;
+            var svg = d3.select("#svgArea");
             
             // Map and projection
             var path = d3.geoPath();
             var projection = d3.geoMercator()
               .scale(180)
-              .center([-40,50])
-              .translate([width / 2, height / 2]);
+              .center([15,50])
+              .translate([700, 300]);
             
             // Data and color scale
             var data = d3.map();
@@ -65,19 +166,18 @@
               .defer(d3.csv, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world_population.csv", function(d) { data.set(d.code, +d.pop); })
               .await(ready);
             
-            function ready(error, topo) {
-            
-              let mouseOver = function(d) {
-                d3.selectAll(".Country")
-                  .transition()
-                  .duration(200)
-                  .style("opacity", .5)
-                d3.select(this)
-                  .transition()
-                  .duration(200)
-                  .style("opacity", 1)
-                  .style("stroke", "black")
-              }
+              function ready(error, topo) {
+                let mouseOver = function(d) {
+                  d3.selectAll(".Country")
+                    .transition()
+                    .duration(200)
+                    .style("opacity", .5)
+                  d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 1)
+                    .style("stroke", "black")
+                }
             
               let mouseLeave = function(d) {
                 d3.selectAll(".Country")
@@ -111,7 +211,119 @@
                   .on("mouseover", mouseOver )
                   .on("mouseleave", mouseLeave )
                 }
-            </script>
+          }
+        </script>
+
+        <script>
+          function heartDiseaseVisualisation() {
+                document.getElementById("svgArea").style.display = "none";
+                document.getElementById("svgAreaForHeartDiseases").style.display = "block";
+                document.getElementById('diseasedropdownContent').style.display = 'none';
+                document.getElementById("visualisationTitle").textContent = "Heart Disease trends Visualisation";
+
+                // The svg
+                var svg = d3.select("#svgAreaForHeartDiseases");
+
+                // Map and projection
+                var path = d3.geoPath();
+                var projection = d3.geoMercator()
+                  .scale(180)
+                  .center([25, 50])
+                  .translate([700, 300]);
+
+                // Data and color scale
+                var data = d3.map();
+                var colorScale = d3.scaleThreshold()
+                  .domain([20, 25, 30, 35, 40, 45])
+                  .range(['#f5deb3', '#d2b48c', '#bc8f8f', '#a0522d', '#8b4513']);
+
+                // Load external data and boot
+                d3.queue()
+                  .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+                  .defer(d3.csv, "Dataset/share-deaths-heart-disease.csv", function(d) {
+                    var country = d.Entity;
+                    var deaths = +d["Deaths - Cardiovascular diseases - Sex: Both - Age: All Ages (Percent)"];
+                    data.set(country, deaths);
+                  })
+                  .await(ready);
+
+                function ready(error, topo) {
+
+                  // Draw the map
+                  svg.append("g")
+                    .selectAll("path")
+                    .data(topo.features)
+                    .enter()
+                    .append("path")
+                    // draw each country
+                    .attr("d", d3.geoPath()
+                      .projection(projection)
+                    )
+                    // set the color of each country
+                    .attr("fill", function(d) {
+                      var country = d.properties.name;
+                      var deaths = data.get(country);
+                      if (deaths != null) {
+                        return colorScale(deaths);
+                      } else {
+                        return "#ccc";
+                      }
+                    })
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0.5)
+                    .on("mouseover", function(d) {
+                    d3.select(this)
+                    .style("stroke", "#000")
+                    .style("stroke-width", 1);
+                    tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+                    tooltip.html(d.properties.name + "<br>" + data.get(d.properties.name) + "%")
+                    .style("left", (d3.event.pageX + 10) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function(d) {
+                    d3.select(this)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0.5);
+                    tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                    });
+
+                      // Add tooltip
+                      var tooltip = d3.select("#tooltip");
+
+                      // Add slider
+                      var slider = d3.select("#yearSlider");
+                      var yearDisplay = d3.select("#yearDisplay");
+                      slider.on("input", function() {
+                        var year = this.value;
+                        yearDisplay.text(year);
+                        d3.csv("Dataset/share-deaths-heart-disease.csv", function(d) {
+                          data.set(d.Entity, +d["Deaths - Cardiovascular diseases - Sex: Both - Age: All Ages (Percent)"]);
+                        }).then(function() {
+                          svg.selectAll("path")
+                            .transition()
+                            .duration(750)
+                            .attr("fill", function(d) {
+                              var country = d.properties.name;
+                              var deaths = data.get(country);
+                              if (deaths != null) {
+                                return colorScale(deaths);
+                              } else {
+                                return "#ccc";
+                              }
+                            });
+                        });
+                      });
+
+                    }
+              document.getElementById('diseasedropdownContent').style.display = '';
+          }
+
+        </script>
+
 
         <div id="footer">
 			<div id="aboutCompany">
@@ -141,4 +353,4 @@
 		</div>
 
     </body>
-</html>
+</htm
