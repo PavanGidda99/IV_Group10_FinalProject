@@ -9,10 +9,28 @@
         <link rel="stylesheet" href="CSS/topNavigationBarStyle.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+        <style>
+      .tooltip {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 5px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      border-radius: 5px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      }
+    </style>
+        
+
         <!-- Javascript files -->
         <script src="http://d3js.org/d3.v4.js"></script>
         <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://d3js.org/topojson.v1.min.js"></script>
+
     </head>
 
     <body>
@@ -30,129 +48,731 @@
                 <i class="fa fa-caret-down"></i>
               </button>
               <div class="dropdown-content" id="diseasedropdownContent">
-                <a href="#" onclick="">Cancer</a>
-                <a href="#" onclick="heartDiseaseVisualisation()">Heart Attack</a>
-                <a href="#" onclick="">Brain tumor</a>
+                <a href="#" onclick="loadCancerPage()">Cancer</a>
+                <a href="#" onclick="loadHeartDiseasePage()">Heart Attack</a>
+                <a href="#" onclick="loadMonkeyPoxPage()">Monkey Pox</a>
+                <a href="#" onclick="loadCOVIDPage()">COVID</a>
               </div>
             </div>
-            <div class="dropdown">
-              <button class="dropbtn">Attributes 
-                <i class="fa fa-caret-down"></i>
-              </button>
-              <div class="dropdown-content" id="dropdownContent">
-                <a href="#" onclick="document.getElementById('attributeArea').style.display = 'block';document.getElementById('dropdownContent').style.display = 'none';">Gender</a>
-                <a href="#" onclick="document.getElementById('ageAttributeArea').style.display = 'block';document.getElementById('dropdownContent').style.display = 'none';">Age</a>
-                <a href="#" onclick="document.getElementById('yearAttributeArea').style.display = 'block';document.getElementById('dropdownContent').style.display = 'none';">Year span</a>
-              </div>
-            </div>
-            <a href="#home">Compare</a>
+            
+            <a href="#" onclick="loadComparision()">Compare</a>
         </div>
 
         <hr>
-        <div id="attributeArea">
-          <div id="attributeheader">
-            <label id="attributetitle"> <a href=""> Visualisation based on Gender Attribute  </a> </label>
-            <ul>
-              <li> <a href="#" onclick="document.getElementById('attributeArea').style.display = 'none';document.getElementById('dropdownContent').style.display = '';"> X </a> </li>
-            </ul>
-          </div>
-          <p> Please select the gender below: </p>
-          <div id="selectionarea">
-            <form>
-              <label class="container">Male
-                <input type="radio" name="gender">
-                <span class="checkmark"></span>
-              </label>
-              <label class="container">Female
-                <input type="radio" name="gender">
-                <span class="checkmark"></span>
-              </label>
-
-              <label class="container">Male and Female
-                <input type="radio" name="gender">
-                <span class="checkmark"></span>
-              </label>
-
-              <label class="container">Others
-                <input type="radio" name="gender">
-                <span class="checkmark"></span>
-              </label>
-            </form>
-            <br><br>
-          </div>
-        </div>
 
         <div id="ageAttributeArea">
           <div id="ageAttributeheader">
-            <label id="ageAttributetitle"> <a href=""> Visualisation based on Age Attribute  </a> </label>
+            <label id="ageAttributetitle"> <a href=""> Comparision of Countries  </a> </label>
             <ul>
               <li> <a href="#" onclick="document.getElementById('ageAttributeArea').style.display = 'none';document.getElementById('dropdownContent').style.display = '';"> X </a> </li>
             </ul>
           </div>
-          <p> Please enter the specific age below: </p> <br>
+          <p> Please specify the country names below: </p> <br>
           <div id="ageSelectionarea">
             <form>
-              <label class="container">From: </label>
+              <label class="container">Country-1: </label>
               <input type="text">
-              <label class="container">To: </label>
+              <label class="container">Country-2: </label>
               <input type="text">
-              <button style="margin-left: 40px; height: 36px; width: 100px; margin-top:3px;"> Proceed </button>
+              <button style="margin-left: 40px; height: 36px; width: 100px; margin-top:3px;" onclick="compare()"> Compare </button>
             </form>
             <br><br><br>
           </div>
         </div>
-
-        <div id="yearAttributeArea">
-          <div id="yearAttributeheader">
-            <label id="yearAttributetitle"> <a href=""> Visualisation based on Year span Attribute  </a> </label>
-            <ul>
-              <li> <a href="#" onclick="document.getElementById('yearAttributeArea').style.display = 'none';document.getElementById('dropdownContent').style.display = '';"> X </a> </li>
-            </ul>
-          </div>
-          <p> Please enter the specific year span below: </p> <br>
-          <div id="yearSelectionarea">
-            <form>
-              <label class="container">From: </label>
-              <input type="text">
-              <label class="container">To: </label>
-              <input type="text">
-              <button style="margin-left: 40px; height: 36px; width: 100px; margin-top:3px;"> Proceed </button>
-            </form>
-            <br><br><br>
-          </div>
-        </div>
-
-        <h2 id="visualisationTitle" style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> Title </h2>
 
 		    <div id="mainBody">
-            <div id="tooltip" style="position: absolute; opacity: 0;"></div>
-            <svg  id = "svgArea" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
-                
-            </svg> 
-
-            <svg  id = "svgAreaForHeartDiseases" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px; display: none;"> 
+          <div id="tooltip" style="position: absolute; opacity: 0;"></div>
+          <div id="homePage" >
+            <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> Population trends Visualisation </h2>
+            <svg  id = "svgForPopulationGlobeAnimation" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;margin-bottom: 80px;"> 
                 
             </svg>
+            <h3 style="margin-left: 105px; margin-bottom: 60px;margin-top: 10px;"> Geo Spatial Population trends</h2>
+            <svg  id = "svgForPopulation" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
+                
+            </svg> 
+          </div>
 
-					
+          <div id="CancerPage" style="display: none;">
+            <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> Cancer Disease trends Visualisation </h2>
+            <svg  id = "svgForCancerGlobeAnimation" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;margin-bottom: 80px;"> 
+                
+            </svg>
+            <h3 style="margin-left: 105px; margin-bottom: 60px;margin-top: 10px;"> Geo Spatial Cancer trends (Death rates)</h2>
+            <svg  id = "svgForCancerDisease" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
+                
+            </svg> 
+          </div>
+
+          <div id="HeartDiseasePage" style="display: none;">
+            <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> Heart Disease trends Visualisation </h2>
+            <svg  id = "svgForHeartGlobeAnimation" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;margin-bottom: 80px;"> 
+                
+            </svg>
+            <h3 style="margin-left: 105px; margin-bottom: 60px;margin-top: 10px;"> Geo Spatial Heart Disease trends (Death rates)</h2>
+            <svg  id = "svgForHeartDisease" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
+                
+            </svg> 
+          </div>
+
+          <div id="MonkeyPoxPage" style="display: none;">
+            <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> Monkey Pox Disease trends Visualisation </h2>
+            <svg  id = "svgForMonkeyPoxGlobeAnimation" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;margin-bottom: 80px;"> 
+                
+            </svg>
+            <h3 style="margin-left: 105px; margin-bottom: 60px;margin-top: 10px;"> Geo Spatial Mokey Pox trends (Death rates)</h2>
+            <svg  id = "svgForMonkeyPox" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
+                
+            </svg> 
+          </div>
+
+          <div id="COVIDPage" style="display: none;">
+            <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;"> COVID Disease trends Visualisation </h2>
+            <svg  id = "svgForCOVIDGlobeAnimation" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;margin-bottom: 80px;"> 
+                
+            </svg>
+            <h3 style="margin-left: 105px; margin-bottom: 60px;margin-top: 10px;"> Geo Spatial COVID trends (Death rates)</h2>
+            <svg  id = "svgForCOVID" height = "600" width ="1400" style="margin-left: 40px; margin-top: 15px;"> 
+                
+            </svg> 
+          </div>
 		    </div>
 
-        <script>
-          populationVisualisation();
+        <div id="compareBody" style="display: none;">
+          <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Statistical Analysis of Health records </h2>
+          
+          <h3 style="margin-left: 115px; margin-bottom: 60px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Bar Distribution for Cancer Disease </h3>
+          <svg id="svgAreaForCancerPlot" height="500" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <text x="200" y="440"> Type of Cancer </text>
+              <text x="-100" y="10" text-anchor="middle" transform="rotate(-90)"> Death Count </text>
+          </svg>
+
+          <h3 style="margin-left: 115px; margin-bottom: 60px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Density Distribution for Heart Stroke Disease </h3>
+          <svg id="svgArea" height="500" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <text x="200" y="420"> Deaths Count </text>
+              <text x="-100" y="10" text-anchor="middle" transform="rotate(-90)"> Death ratios </text>
+          </svg>
+
+          <h3 style="margin-left: 115px; margin-bottom: 60px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;">Recording of Monkey Pox cases</h3>
+          <svg id="svgAreaForMonkeyPox" height="580" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <text x="250" y="520"> New cases per day </text>
+              <text x="-100" y="10" text-anchor="middle" transform="rotate(-90)"> Count </text>
+          </svg>
+
+          <h3 style="margin-left: 115px; margin-bottom: 30px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Total cases noted vs Total Deaths for COVID</h3>
+          <svg id="svgAreaForCOVIDPlot" height="600" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <g id="x-axis" transform="translate(0,460)"> </g>
+              <g id="y-axis" transform="translate(80,0)"> </g>
+              <text x="350" y="520"> Total COVID Cases </text>
+              <text x="-90" y="35" text-anchor="middle" transform="rotate(-90)"> Total Deaths Per day</text>
+          </svg>
+
+        </div>
+
+        <div id="compareCountries" style="display: none;">
+          <h2 style="margin-left: 105px; margin-bottom: 60px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Comparision of Health statistics between the Countries </h2>
+          <h3 style="margin-left: 115px; margin-bottom: 30px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Histogram For Country-1</h3>
+          <svg id="svgAreaForComparision2" height="600" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <g id="x-axis" transform="translate(0,460)"> </g>
+              <g id="y-axis" transform="translate(80,0)"> </g>
+              <text x="350" y="520"> New COVID Cases per day </text>
+              <text x="-100" y="15" text-anchor="middle" transform="rotate(-90)"> Count </text>
+          </svg>
+          <h3 style="margin-left: 115px; margin-bottom: 30px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Histogram For Country-2</h3>
+          <svg id="svgAreaForComparision4" height="600" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <g id="x-axis" transform="translate(0,460)"> </g>
+              <g id="y-axis" transform="translate(80,0)"> </g>
+              <text x="350" y="520"> New COVID Cases per day </text>
+              <text x="-100" y="15" text-anchor="middle" transform="rotate(-90)"> Count </text>
+          </svg>
+          <h3 style="margin-left: 115px; margin-bottom: 30px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Scatterplot For Country-1</h3>
+          <svg id="svgAreaForComparision" height="600" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <g id="x-axis1" transform="translate(0,460)"> </g>
+              <g id="y-axis1" transform="translate(80,0)"> </g>
+              <text x="450" y="520"> Total COVID Cases </text>
+              <text x="-120" y="35" text-anchor="middle" transform="rotate(-90)"> Total Deaths per Day</text>
+          </svg>
+          <h3 style="margin-left: 115px; margin-bottom: 30px;margin-top: 30px;font-family: Arial, Helvetica, sans-serif;"> Scatterplot For Country-2</h3>
+          <svg id="svgAreaForComparision3" height="600" width="900" style="margin-left: 170px; padding-left: 20px; padding-top: -10px;">
+              <g id="x-axis2" transform="translate(0,460)"> </g>
+              <g id="y-axis2" transform="translate(80,0)"> </g>
+              <text x="450" y="520"> Total COVID Cases </text>
+              <text x="-120" y="25" text-anchor="middle" transform="rotate(-90)"> Total Deaths per Day </text>
+          </svg>
+
+        </div>
+
+        
+
+
+        <div id="footer">
+			<div id="aboutCompany">
+				<h3> Company </h3>
+				<ul>
+					<li> <a href=""> About Us </a> </li>
+					<li> <a href=""> Our Services </a> </li>
+					<li> <a href=""> Contact </a> </li>
+				</ul>
+			</div>
+			<div id="getHelp">
+				<h3> Get Help </h3>
+				<ul>
+					<li> <a href=""> FAQ </a> </li>
+          <li> <a href=""> Privacy Policy </a> </li>
+					
+				</ul>
+			</div>
+			<div id="followUs">
+				<h3> Follow Us </h3>
+				<a href=""> <i class="fab fa-facebook-f"> </i> </a>
+				<a href=""> <i class="fab fa-twitter"> </i> </a>
+				<a href=""> <i class="fab fa-instagram"> </i> </a>
+				<a href=""> <i class="fab fa-linkedin-in"> </i> </a>
+			</div>
+
+		</div>
+
+    </body>
+
+<script>
+  function loadComparision() {
+    document.getElementById('ageAttributeArea').style.display = 'block';
+  }
+
+  function compare() {
+    document.getElementById('compareCountries').style.display = 'block';
+    document.getElementById('mainBody').style.display = 'none';
+    document.getElementById('compareBody').style.display = 'none';
+    document.getElementById('footer').style.marginTop = '50px';
+
+
+        // set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 70},
+    width = 660 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#svgAreaForComparision2")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+d3.csv("Dataset/WHO-COVID-19-india-data.csv", function(data) {
+
+  // X axis: scale and draw:
+  var x = d3.scaleLinear()
+      .domain([0, 70])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .range([0, width]);
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // set the parameters for the histogram
+  var histogram = d3.histogram()
+      .value(function(d) { return d["New_cases"]; })   // I need to give the vector of value
+      .domain(x.domain())  // then the domain of the graphic
+      .thresholds(x.ticks(40)); // then the numbers of bins
+
+  // And apply this function to data to get the bins
+  var bins = histogram(data);
+
+  // Y axis: scale and draw:
+  var y = d3.scaleLinear()
+      .range([height, 0]);
+      y.domain([0, 10000]);   // d3.hist has to be called before the Y axis obviously
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+  // append the bar rectangles to the svg element
+  svg.selectAll("rect")
+      .data(bins)
+      .enter()
+      .append("rect")
+        .attr("x", 1)
+        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+        .attr("height", function(d) { return height - y(d.length); })
+        .style("fill", "#6baed6")
+
+});
+histo1();
+
+function histo1() {
+   // set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 70},
+    width = 660 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#svgAreaForComparision4")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+d3.csv("Dataset/USA_data.csv", function(data) {
+
+  // X axis: scale and draw:
+  var x = d3.scaleLinear()
+      .domain([0, 70])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .range([0, width]);
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // set the parameters for the histogram
+  var histogram = d3.histogram()
+      .value(function(d) { return d["new_cases"]; })   // I need to give the vector of value
+      .domain(x.domain())  // then the domain of the graphic
+      .thresholds(x.ticks(40)); // then the numbers of bins
+
+  // And apply this function to data to get the bins
+  var bins = histogram(data);
+
+  // Y axis: scale and draw:
+  var y = d3.scaleLinear()
+      .range([height, 0]);
+      y.domain([0, 50000]);   // d3.hist has to be called before the Y axis obviously
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+  // append the bar rectangles to the svg element
+  svg.selectAll("rect")
+      .data(bins)
+      .enter()
+      .append("rect")
+        .attr("x", 1)
+        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+        .attr("height", function(d) { return height - y(d.length); })
+        .style("fill", "#6baed6")
+
+});
+}
+
+    d3.csv("Dataset/WHO-COVID-19-india-data.csv", function(data) {  
+        var svg = d3.select("#svgAreaForComparision"); 
+        var plots = svg.selectAll("circle").data(data); 
+        var newPlot = plots.enter().append("circle"); 
+        const xScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d["New_cases"]))
+            .range([90, 900]);
+
+          const yScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d["New_deaths"]))
+            .range([450, 50]);
+            
+        newPlot.attr("cx", d => xScale(d["New_cases"])) 
+        .attr("cy", d => yScale(d["New_deaths"])) 
+        .attr("r", 3) 
+        .attr("fill", "red"); 
+
+        let xAxis = d3.axisBottom(xScale);
+        d3.select("#x-axis1").call(xAxis);
+        let yAxis = d3.axisLeft(yScale);
+        d3.select("#y-axis1").call(yAxis);
+
+      } )
+
+    d3.csv("Dataset/USA_data.csv", function(data) {  
+        var svg = d3.select("#svgAreaForComparision3"); 
+        var plots = svg.selectAll("circle").data(data); 
+        var newPlot = plots.enter().append("circle"); 
+        const xScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d["new_cases"]))
+            .range([90, 900]);
+
+          const yScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d["new_deaths"]))
+            .range([450, 50]);
+            
+        newPlot.attr("cx", d => xScale(d["new_cases"])) 
+        .attr("cy", d => yScale(d["new_deaths"])) 
+        .attr("r", 3) 
+        .attr("fill", "red"); 
+
+        let xAxis = d3.axisBottom(xScale);
+        d3.select("#x-axis2").call(xAxis);
+        let yAxis = d3.axisLeft(yScale);
+        d3.select("#y-axis2").call(yAxis);
+
+      } )
+
+  }
+</script>
+
+<script>
+  function loadComparePage() {
+    document.getElementById('mainBody').style.display = 'none';
+    document.getElementById('compareBody').style.display = 'block';
+    document.getElementById('footer').style.marginTop = '50px';
+    barplotForCancer();
+    densityPlotForHeartStroke();
+    plotForCOVID();
+    histoPlotForMonkeyPox();
+  }
+
+  function barplotForCancer() {
+// set the dimensions and margins of the graph
+var margin = {top: 30, right: 30, bottom: 70, left: 80},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#svgAreaForCancerPlot")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Parse the Data
+d3.csv("cancers.csv", function(data) {
+
+// X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .domain(data.map(function(d) { return d.Cancer; }))
+  .padding(0.2);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+  .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-45)")
+    .style("text-anchor", "end");
+
+// Add Y axis
+var y = d3.scaleLinear()
+  .domain([0, 2752964])
+  .range([ height, 0]);
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+// Bars
+svg.selectAll("mybar")
+  .data(data)
+  .enter()
+  .append("rect")
+    .attr("x", function(d) { return x(d.Cancer); })
+    .attr("y", function(d) { return y(d.Cases); })
+    .attr("width", x.bandwidth())
+    .attr("height", function(d) { return height - y(d.Cases); })
+    .attr("fill", "#6baed6")
+
+})
+  }
+
+  function histoPlotForMonkeyPox() {
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 660 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#svgAreaForMonkeyPox")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+d3.csv("Dataset/Monkey Pox Cases (World Wide) Split.csv", function(data) {
+
+  // X axis: scale and draw:
+  var x = d3.scaleLinear()
+      .domain([0, 70])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+      .range([0, width]);
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // set the parameters for the histogram
+  var histogram = d3.histogram()
+      .value(function(d) { return d["total_cases"]; })   // I need to give the vector of value
+      .domain(x.domain())  // then the domain of the graphic
+      .thresholds(x.ticks(40)); // then the numbers of bins
+
+  // And apply this function to data to get the bins
+  var bins = histogram(data);
+
+  // Y axis: scale and draw:
+  var y = d3.scaleLinear()
+      .range([height, 0]);
+      y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+  // append the bar rectangles to the svg element
+  svg.selectAll("rect")
+      .data(bins)
+      .enter()
+      .append("rect")
+        .attr("x", 1)
+        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+        .attr("width", function(d) { return x(d.x1) - x(d.x0) -1 ; })
+        .attr("height", function(d) { return height - y(d.length); })
+        .style("fill", "#6baed6")
+
+});
+  }
+
+  function densityPlotForHeartStroke() {
+    // set the dimensions and margins of the graph
+    var margin = {top: 30, right: 10, bottom: 30, left: 70},
+    width = 490 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#svgArea")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// get the data
+d3.csv("Dataset/share-deaths-heart-disease.csv", function(data) {
+  // Compute kernel density estimation
+  // add the x Axis
+  var x = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, width]);
+
+  var kde = kernelDensityEstimator(kernelEpanechnikov(7), x.ticks(40))
+  var density =  kde( data.map(function(d){  return d["Deaths - Cardiovascular diseases - Sex: Both - Age: All Ages (Percent)"]; }) )
+  var maxDensity = d3.max(density, function(d) { return d[1]; });
+  console.log(maxDensity);
+
+  svg.append("text")
+    .attr("x", 160)
+    .attr("y", 50)
+    .attr("font-size", "14px")
+    .attr("font-family", "Arial")
+    .text("Maximum density for Heart Stroke: "+ "\n" + maxDensity);
+
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+  // add the y Axis
+  var y = d3.scaleLinear()
+            .range([height, 0])
+            .domain([0, maxDensity]);
+  svg.append("g")
+      .call(d3.axisLeft(y));
+
+  
+  // Plot the area
+  svg.append("path")
+      .attr("class", "mypath")
+      .datum(density)
+      .attr("fill", "#6baed6")
+      .attr("opacity", ".8")
+      .attr("stroke", "#000")
+      .attr("stroke-width", 1)
+      .attr("stroke-linejoin", "round")
+      .attr("d",  d3.line()
+        .curve(d3.curveBasis)
+          .x(function(d) { return x(d[0]); })
+          .y(function(d) { return y(d[1]); })
+      );
+
+});
+
+
+// Function to compute density
+function kernelDensityEstimator(kernel, X) {
+  return function(V) {
+    return X.map(function(x) {
+      return [x, d3.mean(V, function(v) { return kernel(x - v); })];
+    });
+  };
+}
+function kernelEpanechnikov(k) {
+  return function(v) {
+    return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
+  };
+}
+  }
+
+  function plotForCOVID() {
+      d3.csv("Dataset/COVID-19 Coronavirus.csv", function(data) {  
+        var svg = d3.select("#svgAreaForCOVIDPlot"); 
+        var plots = svg.selectAll("circle").data(data); 
+        var newPlot = plots.enter().append("circle"); 
+        const xScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d["Total Cases"]))
+            .range([90, 700]);
+
+          const yScale = d3.scaleLinear()
+            .domain(d3.extent(data, d => d["Total Deaths"]))
+            .range([450, 50]);
+            
+        newPlot.attr("cx", d => xScale(d["Total Cases"])) 
+        .attr("cy", d => yScale(d["Total Deaths"])) 
+        .attr("r", 5) 
+        .attr("fill", "red"); 
+
+        let xAxis = d3.axisBottom(xScale);
+        d3.select("#x-axis").call(xAxis);
+        let yAxis = d3.axisLeft(yScale);
+        d3.select("#y-axis").call(yAxis);
+
+      } )
+
+  }
+</script>
+
+
+
+
+<script>
+  loadHomePage();
+  
+  function loadHomePage() {
+    populationGlobeVisualisation();
+    populationVisualisation();
+  }
+
+  function populationGlobeVisualisation() {
+    var config = {
+            speed: 0.01,
+            verticalTilt: -10,
+            horizontalTilt: 0
+          }
+
+    const svg = d3.select('#svgForPopulationGlobeAnimation')
+        .attr('width', 1360).attr('height', 500);
+    const markerGroup = svg.append('g');
+    const projection = d3.geoOrthographic();
+    const initialScale = projection.scale();
+    const path = d3.geoPath().projection(projection);
+    const center = [480, 250];
+
+    const colorScale = d3.scaleOrdinal()
+      .domain(['India', 'China', 'Mexico', 'Brazil', 'Canada', 'USA', 'Russia', 'France', 'Germany'])
+      .range(['#08306B', '#08519C', '#2171B5', '#4292C6', '#6BAED6', '#9ECAE1', '#C6DBEF', '#DEEBF7', '#F7FBFF']);
+
+
+    drawGlobe();    
+    drawGraticule();
+    enableRotation();    
+
+    function drawGlobe() {  
+        d3.queue()
+            .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')          
+            .defer(d3.json, 'locations.json')
+            .await((error, worldData, locationData) => {
+                svg.selectAll(".segment")
+                    .data(topojson.feature(worldData, worldData.objects.countries).features)
+                    .enter().append("path")
+                    .attr("class", "segment")
+                    .attr("d", path)
+                    .style("stroke", "black")
+                    .style("stroke-width", "1px")
+                    .attr("fill", function (d) {
+                          return colorScale(d.id);
+                    })
+                    .style("opacity", ".6");
+
+                    // Create a color scale legend
+                  var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1200) + "," + (230) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d });
+
+                    locations = locationData;
+                    drawMarkers();                   
+            });
+    }
+
+    function drawGraticule() {
+        const graticule = d3.geoGraticule()
+            .step([10, 10]);
+
+        svg.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", path)
+            .style("fill", "#fff")
+            .style("stroke", "#ccc");
+        
+    }
+
+    function enableRotation() {
+        d3.timer(function (elapsed) {
+            projection.rotate([config.speed * elapsed - 120, config.verticalTilt, config.horizontalTilt]);
+            svg.selectAll("path").attr("d", path);
+            drawMarkers();
+        });
+    }        
+
+    function drawMarkers() {
+        const markers = markerGroup.selectAll('circle')
+            .data(locations);
+        markers
+            .enter()
+            .append('circle')
+            .merge(markers)
+            .attr('cx', d => projection([d.longitude, d.latitude])[0])
+            .attr('cy', d => projection([d.longitude, d.latitude])[1])
+            .attr('fill', d => {
+                const coordinate = [d.longitude, d.latitude];
+                gdistance = d3.geoDistance(coordinate, projection.invert(center));
+                return gdistance > 1.57 ? 'none' : 'red';
+            })
+            .attr('r', 5);
+
+        markerGroup.each(function () {
+            this.parentNode.appendChild(this);
+        });
+    }
+
+  }
+            
           function populationVisualisation() {
-            document.getElementById("svgAreaForHeartDiseases").style.display = "none";
-            document.getElementById("svgArea").style.display = "block";
-            document.getElementById("visualisationTitle").textContent = "Population trends Visualisation";
+            document.getElementById("CancerPage").style.display = "none";
+            document.getElementById("HeartDiseasePage").style.display = "none";
+            document.getElementById("MonkeyPoxPage").style.display = "none";
+            document.getElementById("COVIDPage").style.display = "none";
+            document.getElementById("homePage").style.display = "block";
             
             // The svg
-            var svg = d3.select("#svgArea");
+            var svg = d3.select("#svgForPopulation");
             
             // Map and projection
             var path = d3.geoPath();
             var projection = d3.geoMercator()
               .scale(180)
-              .center([15,50])
-              .translate([700, 300]);
+              .center([5,50])
+              .translate([630, 300]);
             
             // Data and color scale
             var data = d3.map();
@@ -167,6 +787,17 @@
               .await(ready);
             
               function ready(error, topo) {
+                var tooltip = d3.select("#tooltip")
+                .style("position", "absolute")
+                .style("padding", "10px")
+                .style("background-color", "#fff")
+                .style("border", "1px solid #000")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("opacity", 0)
+                .style("transition", "opacity 0.5s ease-in-out");
                 let mouseOver = function(d) {
                   d3.selectAll(".Country")
                     .transition()
@@ -177,6 +808,15 @@
                     .duration(200)
                     .style("opacity", 1)
                     .style("stroke", "black")
+                  d3.select(this)
+                  .style("stroke", "#000")
+                  .style("stroke-width", 1);
+                  tooltip.transition()
+                  .duration(200)
+                  .style("opacity", 0.9);
+                  tooltip.html(d.properties.name)
+                  .style("left", (d3.event.pageX + 10) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
                 }
             
               let mouseLeave = function(d) {
@@ -188,6 +828,12 @@
                   .transition()
                   .duration(200)
                   .style("stroke", "transparent")
+                d3.select(this)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0.5);
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
               }
             
               // Draw the map
@@ -209,20 +855,393 @@
                   .attr("class", function(d){ return "Country" } )
                   .style("opacity", .8)
                   .on("mouseover", mouseOver )
+                  .on("click", function(d) {
+                      loadComparePage();
+                  })
                   .on("mouseleave", mouseLeave )
+
+                  // Create a color scale legend
+                  var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1300) + "," + (400) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d });
                 }
           }
         </script>
 
         <script>
+          function loadCancerPage() {
+            document.getElementById("homePage").style.display = "none";
+            document.getElementById("HeartDiseasePage").style.display = "none";
+            document.getElementById("MonkeyPoxPage").style.display = "none";
+            document.getElementById("COVIDPage").style.display = "none";
+            document.getElementById("CancerPage").style.display = "block";
+            document.getElementById('diseasedropdownContent').style.display = 'none';
+            cancerGlobeVisualisation();
+            cancerDiseaseDataVisualisation();
+          }
+
+          function cancerGlobeVisualisation() {
+                  var config = {
+            speed: 0.01,
+            verticalTilt: -10,
+            horizontalTilt: 0
+          }
+
+    const svg = d3.select('#svgForCancerGlobeAnimation')
+        .attr('width', 1360).attr('height', 500);
+    const markerGroup = svg.append('g');
+    const projection = d3.geoOrthographic();
+    const initialScale = projection.scale();
+    const path = d3.geoPath().projection(projection);
+    const center = [480, 250];
+
+    const colorScale = d3.scaleOrdinal()
+      .domain(['Brazil', 'China', 'India', 'Mexico', 'Canada', 'USA', 'Russia'])
+      .range(['#feedde', '#fdbe85', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026']);
+
+
+    drawGlobe();    
+    drawGraticule();
+    enableRotation();    
+
+    function drawGlobe() {  
+        d3.queue()
+            .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')          
+            .defer(d3.json, 'locations.json')
+            .await((error, worldData, locationData) => {
+                svg.selectAll(".segment")
+                    .data(topojson.feature(worldData, worldData.objects.countries).features)
+                    .enter().append("path")
+                    .attr("class", "segment")
+                    .attr("d", path)
+                    .style("stroke", "black")
+                    .style("stroke-width", "1px")
+                    .attr("fill", function (d) {
+                          return colorScale(d.id);
+                    })
+                    .style("opacity", ".6");
+
+                    // Create a color scale legend
+                  var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1200) + "," + (290) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d });
+
+                    locations = locationData;
+                    drawMarkers();                   
+            });
+    }
+
+    function drawGraticule() {
+        const graticule = d3.geoGraticule()
+            .step([10, 10]);
+
+        svg.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", path)
+            .style("fill", "#fff")
+            .style("stroke", "#ccc");
+        
+    }
+
+    function enableRotation() {
+        d3.timer(function (elapsed) {
+            projection.rotate([config.speed * elapsed - 120, config.verticalTilt, config.horizontalTilt]);
+            svg.selectAll("path").attr("d", path);
+            drawMarkers();
+        });
+    }        
+
+    function drawMarkers() {
+        const markers = markerGroup.selectAll('circle')
+            .data(locations);
+        markers
+            .enter()
+            .append('circle')
+            .merge(markers)
+            .attr('cx', d => projection([d.longitude, d.latitude])[0])
+            .attr('cy', d => projection([d.longitude, d.latitude])[1])
+            .attr('fill', d => {
+                const coordinate = [d.longitude, d.latitude];
+                gdistance = d3.geoDistance(coordinate, projection.invert(center));
+                return gdistance > 1.57 ? 'none' : 'red';
+            })
+            .attr('r', 5);
+
+        markerGroup.each(function () {
+            this.parentNode.appendChild(this);
+        });
+    }
+  }
+
+          function cancerDiseaseDataVisualisation() {
+            var svg = d3.select("#svgForCancerDisease");
+            var path = d3.geoPath();
+            var projection = d3.geoMercator()
+              .scale(180)
+              .center([25, 50])
+              .translate([700, 300]);
+            var data = d3.map();
+            var colorScale = d3.scaleThreshold()
+                .domain([0.02, 0.1, 0.2, 0.3, 0.4, 0.5, 0.58])
+                .range(['#feedde', '#fdbe85', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026']);
+
+            // Load external data and boot
+            d3.queue()
+              .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+              .defer(d3.csv, "Dataset/share-of-population-with-cancer-types.csv", function(d) {
+                  var country = d.Entity;
+                  var deaths = +d["Prevalence - Prostate cancer - Sex: Both - Age: Age-standardized (Percent)"];
+                  data.set(country, deaths);
+              })
+              .await(ready);
+
+            function ready(error, topo) {
+              var tooltip = d3.select("#tooltip")
+                .style("position", "absolute")
+                .style("padding", "10px")
+                .style("background-color", "#fff")
+                .style("border", "1px solid #000")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("opacity", 0)
+                .style("transition", "opacity 0.5s ease-in-out");
+              // Draw the map
+              svg.append("g")
+                .selectAll("path")
+                .data(topo.features)
+                .enter()
+                .append("path")
+              // draw each country
+                .attr("d", d3.geoPath()
+                .projection(projection)
+                )
+              // set the color of each country
+              .attr("fill", function(d) {
+                var country = d.properties.name;
+                var deaths = data.get(country);
+                if (deaths != null) {
+                  return colorScale(deaths);
+                } 
+                else {
+                  return "#d2b48c";
+                }
+              })
+              .style("stroke", "#fff")
+              .style("stroke-width", 0.5)
+              .on("mouseover", function(d) {
+                  d3.select(this)
+                  .style("stroke", "#000")
+                  .style("stroke-width", 1);
+                  tooltip.transition()
+                  .duration(200)
+                  .style("opacity", 0.9);
+                  tooltip.html(d.properties.name + "<br>" + data.get(d.properties.name) + "%")
+                  .style("left", (d3.event.pageX + 10) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
+              })
+              .on("click", function(d) {
+                      loadComparePage();
+                  })
+              .on("mouseout", function(d) {
+                  d3.select(this)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0.5);
+                  tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+              });
+
+              // Add tooltip
+              var tooltip = d3.select("#tooltip");
+
+              var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1300) + "," + (400) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d + "%" });
+
+            }
+            document.getElementById('diseasedropdownContent').style.display = '';
+          }
+
+         
+        </script>
+
+        <script>
+          function loadHeartDiseasePage() {
+            document.getElementById("homePage").style.display = "none";
+            document.getElementById("CancerPage").style.display = "none";
+            document.getElementById("MonkeyPoxPage").style.display = "none";
+            document.getElementById("COVIDPage").style.display = "none";
+            document.getElementById("HeartDiseasePage").style.display = "block";
+            document.getElementById('diseasedropdownContent').style.display = 'none';
+            heartDiseaseGlobeVisualisation();
+            heartDiseaseVisualisation();
+          }
+
+      function heartDiseaseGlobeVisualisation() {
+                  var config = {
+            speed: 0.01,
+            verticalTilt: -10,
+            horizontalTilt: 0
+          }
+
+    const svg = d3.select('#svgForHeartGlobeAnimation')
+        .attr('width', 1360).attr('height', 500);
+    const markerGroup = svg.append('g');
+    const projection = d3.geoOrthographic();
+    const initialScale = projection.scale();
+    const path = d3.geoPath().projection(projection);
+    const center = [480, 250];
+
+    const colorScale = d3.scaleOrdinal()
+      .domain(['China', 'India', 'Mexico', 'Brazil', 'Canada', 'USA', 'Russia', 'France', 'Germany'])
+      .range(['#F5DEB3', '#D2B48C', '#BC8F8F', '#CD853F', '#A0522D', '#8B4513', '#664C28', '#503C1F', '#1A0A02']);
+
+
+    drawGlobe();    
+    drawGraticule();
+    enableRotation();    
+
+    function drawGlobe() {  
+        d3.queue()
+            .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')          
+            .defer(d3.json, 'locations.json')
+            .await((error, worldData, locationData) => {
+                svg.selectAll(".segment")
+                    .data(topojson.feature(worldData, worldData.objects.countries).features)
+                    .enter().append("path")
+                    .attr("class", "segment")
+                    .attr("d", path)
+                    .style("stroke", "black")
+                    .style("stroke-width", "1px")
+                    .attr("fill", function (d) {
+                          return colorScale(d.id);
+                    })
+                    .style("opacity", ".6");
+
+                    // Create a color scale legend
+                  var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1200) + "," + (290) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d });
+
+                    locations = locationData;
+                    drawMarkers();                   
+            });
+    }
+
+    function drawGraticule() {
+        const graticule = d3.geoGraticule()
+            .step([10, 10]);
+
+        svg.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", path)
+            .style("fill", "#fff")
+            .style("stroke", "#ccc");
+        
+    }
+
+    function enableRotation() {
+        d3.timer(function (elapsed) {
+            projection.rotate([config.speed * elapsed - 120, config.verticalTilt, config.horizontalTilt]);
+            svg.selectAll("path").attr("d", path);
+            drawMarkers();
+        });
+    }        
+
+    function drawMarkers() {
+        const markers = markerGroup.selectAll('circle')
+            .data(locations);
+        markers
+            .enter()
+            .append('circle')
+            .merge(markers)
+            .attr('cx', d => projection([d.longitude, d.latitude])[0])
+            .attr('cy', d => projection([d.longitude, d.latitude])[1])
+            .attr('fill', d => {
+                const coordinate = [d.longitude, d.latitude];
+                gdistance = d3.geoDistance(coordinate, projection.invert(center));
+                return gdistance > 1.57 ? 'none' : 'red';
+            })
+            .attr('r', 5);
+
+        markerGroup.each(function () {
+            this.parentNode.appendChild(this);
+        });
+    }
+  }
+
           function heartDiseaseVisualisation() {
-                document.getElementById("svgArea").style.display = "none";
-                document.getElementById("svgAreaForHeartDiseases").style.display = "block";
-                document.getElementById('diseasedropdownContent').style.display = 'none';
-                document.getElementById("visualisationTitle").textContent = "Heart Disease trends Visualisation";
 
                 // The svg
-                var svg = d3.select("#svgAreaForHeartDiseases");
+                var svg = d3.select("#svgForHeartDisease");
 
                 // Map and projection
                 var path = d3.geoPath();
@@ -248,6 +1267,17 @@
                   .await(ready);
 
                 function ready(error, topo) {
+                  var tooltip = d3.select("#tooltip")
+                .style("position", "absolute")
+                .style("padding", "10px")
+                .style("background-color", "#fff")
+                .style("border", "1px solid #000")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("opacity", 0)
+                .style("transition", "opacity 0.5s ease-in-out");
 
                   // Draw the map
                   svg.append("g")
@@ -282,6 +1312,9 @@
                     .style("left", (d3.event.pageX + 10) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
                     })
+                    .on("click", function(d) {
+                      loadComparePage();
+                  })
                     .on("mouseout", function(d) {
                     d3.select(this)
                     .style("stroke", "#fff")
@@ -294,63 +1327,498 @@
                       // Add tooltip
                       var tooltip = d3.select("#tooltip");
 
-                      // Add slider
-                      var slider = d3.select("#yearSlider");
-                      var yearDisplay = d3.select("#yearDisplay");
-                      slider.on("input", function() {
-                        var year = this.value;
-                        yearDisplay.text(year);
-                        d3.csv("Dataset/share-deaths-heart-disease.csv", function(d) {
-                          data.set(d.Entity, +d["Deaths - Cardiovascular diseases - Sex: Both - Age: All Ages (Percent)"]);
-                        }).then(function() {
-                          svg.selectAll("path")
-                            .transition()
-                            .duration(750)
-                            .attr("fill", function(d) {
-                              var country = d.properties.name;
-                              var deaths = data.get(country);
-                              if (deaths != null) {
-                                return colorScale(deaths);
-                              } else {
-                                return "#ccc";
-                              }
-                            });
-                        });
-                      });
+                      var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1300) + "," + (400) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
 
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d + "%" });
                     }
               document.getElementById('diseasedropdownContent').style.display = '';
           }
 
         </script>
 
+        <script>
 
-        <div id="footer">
-			<div id="aboutCompany">
-				<h3> Company </h3>
-				<ul>
-					<li> <a href=""> About Us </a> </li>
-					<li> <a href=""> Our Services </a> </li>
-					<li> <a href=""> Contact </a> </li>
-				</ul>
-			</div>
-			<div id="getHelp">
-				<h3> Get Help </h3>
-				<ul>
-					<li> <a href=""> FAQ </a> </li>
-                    <li> <a href=""> Privacy Policy </a> </li>
-					
-				</ul>
-			</div>
-			<div id="followUs">
-				<h3> Follow Us </h3>
-				<a href=""> <i class="fab fa-facebook-f"> </i> </a>
-				<a href=""> <i class="fab fa-twitter"> </i> </a>
-				<a href=""> <i class="fab fa-instagram"> </i> </a>
-				<a href=""> <i class="fab fa-linkedin-in"> </i> </a>
-			</div>
+          function loadMonkeyPoxPage() {
+            document.getElementById("homePage").style.display = "none";
+            document.getElementById("CancerPage").style.display = "none";
+            document.getElementById("HeartDiseasePage").style.display = "none";
+            document.getElementById("COVIDPage").style.display = "none";
+            document.getElementById("MonkeyPoxPage").style.display = "block";
+            document.getElementById('diseasedropdownContent').style.display = 'none';
+            monkeyPoxGlobeVisualisation();
+            monkeypoxDiseaseDataVisualisation();
+          }
 
-		</div>
+          function monkeyPoxGlobeVisualisation() {
+            var config = {
+            speed: 0.01,
+            verticalTilt: -10,
+            horizontalTilt: 0
+          }
 
-    </body>
-</htm
+    const svg = d3.select('#svgForMonkeyPoxGlobeAnimation')
+        .attr('width', 1360).attr('height', 500);
+    const markerGroup = svg.append('g');
+    const projection = d3.geoOrthographic();
+    const initialScale = projection.scale();
+    const path = d3.geoPath().projection(projection);
+    const center = [480, 250];
+
+    const colorScale = d3.scaleOrdinal()
+      .domain(['China', 'India', 'Mexico', 'Brazil', 'Canada', 'USA', 'Russia', 'France', 'Germany'])
+      .range(['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b']);
+
+
+    drawGlobe();    
+    drawGraticule();
+    enableRotation();    
+
+    function drawGlobe() {  
+        d3.queue()
+            .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')          
+            .defer(d3.json, 'locations.json')
+            .await((error, worldData, locationData) => {
+                svg.selectAll(".segment")
+                    .data(topojson.feature(worldData, worldData.objects.countries).features)
+                    .enter().append("path")
+                    .attr("class", "segment")
+                    .attr("d", path)
+                    .style("stroke", "black")
+                    .style("stroke-width", "1px")
+                    .attr("fill", function (d) {
+                          return colorScale(d.id);
+                    })
+                    .style("opacity", ".6");
+
+                    // Create a color scale legend
+                  var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1200) + "," + (290) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d });
+
+                    locations = locationData;
+                    drawMarkers();                   
+            });
+    }
+
+    function drawGraticule() {
+        const graticule = d3.geoGraticule()
+            .step([10, 10]);
+
+        svg.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", path)
+            .style("fill", "#fff")
+            .style("stroke", "#ccc");
+        
+    }
+
+    function enableRotation() {
+        d3.timer(function (elapsed) {
+            projection.rotate([config.speed * elapsed - 120, config.verticalTilt, config.horizontalTilt]);
+            svg.selectAll("path").attr("d", path);
+            drawMarkers();
+        });
+    }        
+
+    function drawMarkers() {
+        const markers = markerGroup.selectAll('circle')
+            .data(locations);
+        markers
+            .enter()
+            .append('circle')
+            .merge(markers)
+            .attr('cx', d => projection([d.longitude, d.latitude])[0])
+            .attr('cy', d => projection([d.longitude, d.latitude])[1])
+            .attr('fill', d => {
+                const coordinate = [d.longitude, d.latitude];
+                gdistance = d3.geoDistance(coordinate, projection.invert(center));
+                return gdistance > 1.57 ? 'none' : 'red';
+            })
+            .attr('r', 5);
+
+        markerGroup.each(function () {
+            this.parentNode.appendChild(this);
+        });
+    }
+  }
+
+            function monkeypoxDiseaseDataVisualisation() {
+
+            // The svg
+            var svg = d3.select("#svgForMonkeyPox");
+
+            // Map and projection
+            var path = d3.geoPath();
+            var projection = d3.geoMercator()
+              .scale(180)
+              .center([25, 50])
+              .translate([700, 300]);
+
+            // Data and color scale
+            var data = d3.map();
+            var colorScale = d3.scaleThreshold()
+              .domain([0.0001, 0.001, 0.01, 0.3, 0.4, 0.5, 0.58])
+              .range(d3.schemeGreens[7]);
+
+            // Load external data and boot
+            d3.queue()
+              .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+              .defer(d3.csv, "Dataset/Monkey Pox Cases (World Wide) Split.csv", function(d) {
+                  var country = d.location;
+                  var deaths = +d["new_cases_smoothed_per_million"];
+                  data.set(country, deaths);
+              })
+              .await(ready);
+
+            function ready(error, topo) {
+              var tooltip = d3.select("#tooltip")
+                .style("position", "absolute")
+                .style("padding", "10px")
+                .style("background-color", "#fff")
+                .style("border", "1px solid #000")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("opacity", 0)
+                .style("transition", "opacity 0.5s ease-in-out");
+              // Draw the map
+              svg.append("g")
+                .selectAll("path")
+                .data(topo.features)
+                .enter()
+                .append("path")
+              // draw each country
+                .attr("d", d3.geoPath()
+                .projection(projection)
+                )
+              // set the color of each country
+              .attr("fill", function(d) {
+                var country = d.properties.name;
+                var deaths = data.get(country);
+                if (deaths != null) {
+                  return colorScale(deaths);
+                } 
+                else {
+                  return "#e5f5e0";
+                }
+              })
+              .style("stroke", "#fff")
+              .style("stroke-width", 0.5)
+              .on("mouseover", function(d) {
+                  d3.select(this)
+                  .style("stroke", "#000")
+                  .style("stroke-width", 1);
+                  tooltip.transition()
+                  .duration(200)
+                  .style("opacity", 0.9);
+                  tooltip.html(d.properties.name + "<br>" + data.get(d.properties.name) + "%")
+                  .style("left", (d3.event.pageX + 10) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
+              })
+              .on("click", function(d) {
+                      loadComparePage();
+                  })
+              .on("mouseout", function(d) {
+                  d3.select(this)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0.5);
+                  tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+              });
+
+              // Add tooltip
+              var tooltip = d3.select("#tooltip");
+
+              var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1300) + "," + (400) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d + "%" });
+            }
+            document.getElementById('diseasedropdownContent').style.display = '';
+          }
+        </script>
+
+        <script>
+
+          function loadCOVIDPage() {
+            document.getElementById("homePage").style.display = "none";
+            document.getElementById("CancerPage").style.display = "none";
+            document.getElementById("HeartDiseasePage").style.display = "none";
+            document.getElementById("MonkeyPoxPage").style.display = "none";
+            document.getElementById("COVIDPage").style.display = "block";
+            document.getElementById('diseasedropdownContent').style.display = 'none';
+            COVIDGlobeVisualisation();
+            covidDiseaseDataVisualisation();
+          }
+
+      function COVIDGlobeVisualisation() {
+            var config = {
+            speed: 0.01,
+            verticalTilt: -10,
+            horizontalTilt: 0
+          }
+
+    const svg = d3.select('#svgForCOVIDGlobeAnimation')
+        .attr('width', 1360).attr('height', 500);
+    const markerGroup = svg.append('g');
+    const projection = d3.geoOrthographic();
+    const initialScale = projection.scale();
+    const path = d3.geoPath().projection(projection);
+    const center = [480, 250];
+
+    const colorScale = d3.scaleOrdinal()
+      .domain(['Brazil', 'Canada', 'Mexico', 'India', 'China', 'USA', 'Russia', 'France', 'Germany'])
+      .range([  "#FFF5F0",  "#FEE0D2",  "#FCBBA1",  "#FC9272",  "#FB6A4A",  "#EF3B2C",  "#CB181D",  "#A50F15",  "#67000D",  "#49000A",  "#320000"]);
+
+
+    drawGlobe();    
+    drawGraticule();
+    enableRotation();    
+
+    function drawGlobe() {  
+        d3.queue()
+            .defer(d3.json, 'https://gist.githubusercontent.com/mbostock/4090846/raw/d534aba169207548a8a3d670c9c2cc719ff05c47/world-110m.json')          
+            .defer(d3.json, 'locations.json')
+            .await((error, worldData, locationData) => {
+                svg.selectAll(".segment")
+                    .data(topojson.feature(worldData, worldData.objects.countries).features)
+                    .enter().append("path")
+                    .attr("class", "segment")
+                    .attr("d", path)
+                    .style("stroke", "black")
+                    .style("stroke-width", "1px")
+                    .attr("fill", function (d) {
+                          return colorScale(d.id);
+                    })
+                    .style("opacity", ".6");
+
+                    // Create a color scale legend
+                  var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1200) + "," + (290) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d });
+
+                    locations = locationData;
+                    drawMarkers();                   
+            });
+    }
+
+    function drawGraticule() {
+        const graticule = d3.geoGraticule()
+            .step([10, 10]);
+
+        svg.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", path)
+            .style("fill", "#fff")
+            .style("stroke", "#ccc");
+        
+    }
+
+    function enableRotation() {
+        d3.timer(function (elapsed) {
+            projection.rotate([config.speed * elapsed - 120, config.verticalTilt, config.horizontalTilt]);
+            svg.selectAll("path").attr("d", path);
+            drawMarkers();
+        });
+    }        
+
+    function drawMarkers() {
+        const markers = markerGroup.selectAll('circle')
+            .data(locations);
+        markers
+            .enter()
+            .append('circle')
+            .merge(markers)
+            .attr('cx', d => projection([d.longitude, d.latitude])[0])
+            .attr('cy', d => projection([d.longitude, d.latitude])[1])
+            .attr('fill', d => {
+                const coordinate = [d.longitude, d.latitude];
+                gdistance = d3.geoDistance(coordinate, projection.invert(center));
+                return gdistance > 1.57 ? 'none' : 'red';
+            })
+            .attr('r', 5);
+
+        markerGroup.each(function () {
+            this.parentNode.appendChild(this);
+        });
+    }
+  }
+
+            function covidDiseaseDataVisualisation() {
+              var svg = d3.select("#svgForCOVID");
+            var path = d3.geoPath();
+            var projection = d3.geoMercator()
+              .scale(180)
+              .center([25, 50])
+              .translate([700, 300]);
+
+            // Data and color scale
+            var data = d3.map();
+            var colorScale = d3.scaleThreshold()
+              .domain([0.05, 0.8, 1.6, 2.4, 3.2, 4.0, 4.8])
+              .range(d3.schemeReds[7]);
+
+            // Load external data and boot
+            d3.queue()
+              .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+              .defer(d3.csv, "Dataset/COVID-19 Coronavirus.csv", function(d) {
+                  var country = d.Country;
+                  var deaths = +d["Death percentage"];
+                  data.set(country, deaths);
+              })
+              .await(ready);
+
+            function ready(error, topo) {
+              var tooltip = d3.select("#tooltip")
+                .style("position", "absolute")
+                .style("padding", "10px")
+                .style("background-color", "#fff")
+                .style("border", "1px solid #000")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("opacity", 0)
+                .style("transition", "opacity 0.5s ease-in-out");
+              // Draw the map
+              svg.append("g")
+                .selectAll("path")
+                .data(topo.features)
+                .enter()
+                .append("path")
+              // draw each country
+                .attr("d", d3.geoPath()
+                .projection(projection)
+                )
+              // set the color of each country
+              .attr("fill", function(d) {
+                var country = d.properties.name;
+                var deaths = data.get(country);
+                if (deaths != null) {
+                  return colorScale(deaths);
+                } 
+                else {
+                  return "#f5deb3";
+                }
+              })
+              .style("stroke", "#fff")
+              .style("stroke-width", 0.5)
+              .on("mouseover", function(d) {
+                  d3.select(this)
+                  .style("stroke", "#000")
+                  .style("stroke-width", 1);
+                  tooltip.transition()
+                  .duration(200)
+                  .style("opacity", 0.9);
+                  tooltip.html(d.properties.name + "<br>" + data.get(d.properties.name) + "%")
+                  .style("left", (d3.event.pageX + 10) + "px")
+                  .style("top", (d3.event.pageY - 28) + "px");
+              })
+              .on("click", function(d) {
+                      loadComparePage();
+                  })
+              .on("mouseout", function(d) {
+                  d3.select(this)
+                    .style("stroke", "#fff")
+                    .style("stroke-width", 0.5);
+                  tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+              });
+
+              // Add tooltip
+              var tooltip = d3.select("#tooltip");
+
+              var legend = svg.append("g")
+                    .attr("class", "legend")
+                    .attr("transform", "translate(" + (1300) + "," + (400) + ")")
+                    .selectAll("g")
+                    .data(colorScale.domain())
+                    .enter().append("g");
+
+                  legend.append("rect")
+                    .attr("x", -10)
+                    .attr("y", function(d, i) { return i * 30; })
+                    .attr("width", 28)
+                    .attr("height", 28)
+                    .style("fill", function(d) { return colorScale(d); });
+
+                  legend.append("text")
+                    .attr("x", 25)
+                    .attr("y", function(d, i) { return i * 30 + 12; })
+                    .attr("dy", ".35em")
+                    .text(function(d) { return d + "%" });
+            }
+            document.getElementById('diseasedropdownContent').style.display = '';
+          }
+        </script>
+
+
+</html>
